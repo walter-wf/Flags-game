@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./game.css">
+</head>
+
+<body>
+    <div class='header'>
+        <button id="startGame">Jugar!</button>
+        <div id="gameBox">
+            <div class='imgBox'>
+            </div>
+            <small id='countryName'></small> <br>
+            <input type="text" id="inputGuess">
+            <button id="guessButton">Adivinar</button>
+
+        </div>
+    </div>
+</body>
+<script>
+    let myCountry = null
+    $(document).ready(function () {
+        $("#gameBox").hide()
+
+        $("#startGame").click(function () {
+            const endpoint = "https://restcountries.com/v2/all"
+            $.get(endpoint, function (data, status) {
+                if (status === 'success') {
+                    $("#gameBox").show()
+                    const randomNumber = Math.floor(Math.random() * 250)
+                    myCountry = data[randomNumber]
+                    const imgElement = `<img src="${myCountry.flag}" alt="countryImage">`
+                    $('.imgBox').html(imgElement)
+                    $('#countryName').text(myCountry.name)
+                }
+            })
+        })
+        $("#guessButton").click(function () {
+            const inputGuess = $('#inputGuess').val()
+            const hasWon = inputGuess.toLowerCase() === myCountry.name.toLowerCase()
+            if (hasWon) {
+                alert('Has ganado!! :D Felicitaciones')
+            } else {
+                alert('Intentalo de nuevo :( ')
+            }
+        })
+    })
+</script>
+
+</html>
